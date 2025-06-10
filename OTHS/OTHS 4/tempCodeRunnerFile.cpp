@@ -1,0 +1,1 @@
+cout << stoll(sa) - n;
