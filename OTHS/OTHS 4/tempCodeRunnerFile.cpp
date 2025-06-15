@@ -1,1 +1,1 @@
-cout << stoll(sa) - n;
+it--;
