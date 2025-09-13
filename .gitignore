@@ -1,3 +1,4 @@
 *.exe
 /bits
 /.vscode
+!/.vscode/launch.json
