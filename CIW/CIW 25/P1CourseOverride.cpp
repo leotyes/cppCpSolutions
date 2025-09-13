@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
-"the sun will rise again, and we will try again";
+
 int m = -1;
 vector<tuple<int, int, int, int, int>> vv;   
 void take(array<array<bool, 1000>, 1000>& ah, vector<int>& ct, int cs) {
