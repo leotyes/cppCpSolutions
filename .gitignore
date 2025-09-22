@@ -1,0 +1,7 @@
+*.exe
+/bits
+/.vscode
+!/.vscode/launch.json
+CMakeLists.txt
+cmake-build-debug
+cmake-build-debug/*
