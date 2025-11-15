@@ -8,3 +8,6 @@ cmake-build-debug/*
 .idea
 .idea/*
 /Test.cpp
+/Learning/ClassLearning.cpp
+/Learning
+/Learning/*
