@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int main() {
+int main1() {
     cin.sync_with_stdio(0);
     cin.tie(0);
 
@@ -38,4 +38,62 @@ int main() {
     }
 
     cout << ans;
+}
+
+// Using custom comparator
+int main() {
+    cin.sync_with_stdio(0);
+    cin.tie(0);
+
+    long long t, ct = 0;
+    int n, prev, ans = 0;
+
+    cin >> t >> n;
+
+    vector<int> xi(n);
+
+    for (int i = 0; i < n; i++) {
+        cin >> xi[i];
+    }
+// Putting & inside the lambda square brackets captures the context
+    sort(xi.begin(), xi.end(), [](int a, int b) {
+        return abs(a) < abs(b);
+    });
+
+    if (abs(xi[0]) <= t) {
+        ans++;
+        prev = xi[0];
+        ct += abs(xi[0]);
+    } else {
+        cout << 0;
+        return 0;
+    }
+
+    for (int i = 1; i < n; i++) {
+        ct += abs(xi[i] - prev);
+        if (ct > t) {
+            cout << ans;
+            return 0;
+        }
+        ans++;
+        prev = xi[i];
+        // if (prev > 0 && xi[i] > 0) {
+        //     ct += xi[i] - prev;
+        //     if (ct > t) {
+        //         cout << ans;
+        //         return 0;
+        //     }
+        //     ans++;
+        // } else if (prev < 0 && xi[i] < 0) {
+        //     ct += prev - xi[i];
+        //     if (ct > t) {
+        //         cout << ans;
+        //         return 0;
+        //     }
+        //     ans++;
+        // } else {
+        //     ct += abs(prev - xi[i]);
+        //
+        // }
+    }
 }
