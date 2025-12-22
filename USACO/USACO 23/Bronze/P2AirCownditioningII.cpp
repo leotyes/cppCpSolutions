@@ -1,3 +1,1 @@
-//
-// Created by roblo on 2025-12-19.
-//
+// Just pure recursion bro i don't wanna rewrite it
