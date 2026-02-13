@@ -1,23 +1,32 @@
 #include <bits/stdc++.h>
-#include <iostream>
-#include <unordered_map>
-#include <vector>
 using namespace std;
 
 int main() {
     cin.sync_with_stdio(0);
     cin.tie(0);
-    int n;
+    int n, m, o;
+
     cin >> n;
-    unordered_map<int, int> ns;
+
+    map<int, int> mfreq;
+    vector<int> vans(4001, 0);
+
     for (int i = 0; i < n; i++) {
-        int l;
-        cin >> l;
-        if (ns.find(l) != ns.end()) {
-            ns[l] += 1;
-        } else {
-            ns[l] = 1;
+        int li;
+        cin >> li;
+        mfreq[li]++;
+    }
+
+    for (auto i = mfreq.begin(); i != mfreq.end(); i++) {
+        auto j = i;
+        vans[j->first + i->first] += j->second / 2;
+        j++;
+        for (; j != mfreq.end(); j++) {
+            vans[j->first + i->first] += min(j->second, i->second);
         }
     }
-    
+
+    m = *max_element(vans.begin(), vans.end());
+    o = count(vans.begin(), vans.end(), m);
+    cout << m << " " << o << "\n";
 }
