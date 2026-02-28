@@ -1,90 +1,51 @@
-// partials
 #include <bits/stdc++.h>
 using namespace std;
 
-vector<vector<int>> vdm;
-vector<vector<int>> vm;
+vector<int> vb;
 int n;
-int smax = -1;
-map<int, int> fans;
 
-void dfs(int ci, int cs, int rs) {
-    if (ci == n + 1) {
-        smax = max(smax, cs);
-        fans[cs]++;
+void generate(int pos, int mask) {
+    if (pos == n) {
+        vb.push_back(mask);
         return;
     }
-    if (cs + rs < smax) return;
-    vector<vector<int>> vs;
-    int tcs = cs, trs = rs;
-    for (int i : vdm[ci]) {
-        vs.push_back({i, vm[i][4], vm[i][6]});
-        if (vm[i][6] == 1) continue;
-        vm[i][4]--;
-        if (vm[i][0] != ci) {
-            vm[i][6] = 1;
-            trs -= vm[i][3];
-        } else if (vm[i][4] == 0) {
-            tcs += vm[i][3];
-            trs -= vm[i][3];
-        }
-    }
-    dfs(ci + 1, tcs, trs);
-    tcs = cs;
-    trs = rs;
-    for (auto x : vs) {
-        vm[x[0]][4] = x[1];
-        vm[x[0]][6] = x[2];
-    }
-    for (int i : vdm[ci]) {
-        if (vm[i][6] == 1) continue;
-        vm[i][4]--;
-        if (vm[i][0] != ci) {
-            if (vm[i][4] == 0) {
-                tcs += vm[i][3];
-                trs -= vm[i][3];
-            }
-        } else {
-            vm[i][6] = 1;
-            trs -= vm[i][3];
-        }
-    }
-    dfs(ci + 1, tcs, trs);
-    for (auto x : vs) {
-        vm[x[0]][4] = x[1];
-        vm[x[0]][6] = x[2];
-    }
+    generate(pos + 1, mask);
+    generate(pos + 1, mask | (1 << pos));
 }
 
 int main() {
-    ios::sync_with_stdio(0);
+    ios_base::sync_with_stdio(0);
     cin.tie(0);
 
-    int k;
+    int k, ans = -1, nans = 0;
 
     cin >> n >> k;
 
-    vdm.resize(n + 1, vector<int>());
+    vector<tuple<int, int, int>> vt;
     map<tuple<int, int, int>, int> mt;
 
-    for (int i = 0; i < k; i++) {
+    while (k--) {
         int xi, yi, zi;
         cin >> xi >> yi >> zi;
-        mt[make_tuple(xi, yi ,zi)]++;
+        vt.emplace_back(xi, yi, zi);
+        mt[make_tuple(xi, yi, zi)]++;
     }
 
-    int tc = 0, irs = 0;
+    generate(0, 0);
 
-    for (auto [p, f] : mt) {
-        auto [xi, yi, zi] = p;
-        vdm[xi].push_back(tc);
-        vdm[yi].push_back(tc);
-        vdm[zi].push_back(tc);
-        // unknowns, good, impossible
-        vm.push_back({xi, yi, zi, f, 3, 0, 0});
-        irs += f;
-        tc++;
+    for (int mask : vb) {
+        int curs = 0;
+        for (auto [t, f] : mt) {
+            auto [x, y, z] = t;
+            if ((mask & 1 << (x - 1)) != 0 && (mask & 1 << (y - 1)) == 0 && (mask & 1 << (z - 1)) == 0) curs += f;
+        }
+        if (curs > ans) {
+            ans = curs;
+            nans = 1;
+        } else if (curs == ans) {
+            nans++;
+        }
     }
-    dfs(1, 0, irs);
-    cout << fans.rbegin()->first << " " << fans.rbegin()->second;
+
+    cout << ans << " " << nans;
 }
