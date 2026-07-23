@@ -38,5 +38,3 @@ int main() {
         }
     }
 }
-Moo Hunt
-Purchasing Milk
