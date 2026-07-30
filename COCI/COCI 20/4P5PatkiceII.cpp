@@ -1,4 +1,3 @@
-// use 0-1 weighted bfs to track changes
 #include <bits/stdc++.h>
 using namespace std;
 
