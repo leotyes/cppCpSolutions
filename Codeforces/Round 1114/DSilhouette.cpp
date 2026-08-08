@@ -2,70 +2,70 @@
 using namespace std;
 #define int long long
 
-signed main() {
-    ios_base::sync_with_stdio(0);
-    cin.tie(0);
+signed main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
 
     int t;
     cin >> t;
     while (t--) {
-        int n, cursum = 0;
-        bool f = false;
+        int n;
         cin >> n;
+        vector<int> b(n);
+        for (int i = 0; i < n; i++) cin >> b[i];
+
         if (n == 1) {
-            int x;
-            cin >> x;
-            cout << "1\n";
+            cout << (b[0] == 0 ? "1\n" : "-1\n");
             continue;
         }
-        vector<int> vs(n);
-        map<int, int> mfreq;
-        unordered_map<int, vector<int>> mpos;
-        unordered_map<int, int> mans;
-        for (int i = 0; i < n; i++) {
-            cin >> vs[i];
-            mfreq[vs[i]]++;
-            mpos[vs[i]].push_back(i);
-        }
-        if (mfreq.find(0) == mfreq.end()) {
+
+        vector<pair<int,int>> vp(n);
+        for (int i = 0; i < n; i++) vp[i] = {b[i], i};
+        sort(vp.begin(), vp.end());
+
+        if (vp[0].first != 0) {
             cout << "-1\n";
             continue;
         }
-        int mmin = -1;
-        for (auto it = mfreq.begin(); it != mfreq.end(); ++it) {
-            auto [v, c] = *it;
 
-            if (next(it) != mfreq.end()) {
-                auto [nv, nc] = *next(it);
-                int rt = nv - cursum, pans = rt / c;
-                if (pans < mmin) {
-                    f = true;
+        vector<int> a(n);
+        bool ok = true;
+        int cursum = 0, preva = 0;
+        int i = 0;
+
+        while (i < n && ok) {
+            int j = i;
+            int curb = vp[i].first;
+            while (j < n && vp[j].first == curb) j++;
+            int cnt = j - i;
+            int cura;
+
+            if (j < n) {
+                int nextb = vp[j].first;
+                int rt = nextb - cursum;
+                if (rt <= 0 || rt % cnt != 0) {
+                    ok = false;
                     break;
                 }
-                if (pans * c == rt) {
-                    mans[v] = pans;
-                    mmin = pans;
-                    cursum += pans * c;
-                } else {
-                    f = true;
+                cura = rt / cnt;
+                if (cura <= preva) {
+                    ok = false;
                     break;
                 }
+                cursum += cura * cnt;
             } else {
-                mans[v] = mans[prev(it)->first] + 1;
+                cura = preva + 1;
             }
+
+            for (int p = i; p < j; p++) a[vp[p].second] = cura;
+            preva = cura;
+            i = j;
         }
-        vector<int> vans(n);
-        if (f) {
+
+        if (!ok) {
             cout << "-1\n";
         } else {
-            for (auto [v, vpos] : mpos) {
-                for (int x : vpos) {
-                    vans[x] = mans[v];
-                }
-            }
-            for (int x : vans) {
-                cout << x << ' ';
-            }
+            for (int k = 0; k < n; k++) cout << a[k] << ' ';
             cout << '\n';
         }
     }
