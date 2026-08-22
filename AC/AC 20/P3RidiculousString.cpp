@@ -9,7 +9,7 @@ int main() {
     cin >> s >> t;
     vector<char> vs(s), vt(t);
     vector<vector<int>> next(s + 1, vector<int>(26, s));
-    set<char> sreq, shas;
+    set<char> shas;
     for (int i = 0; i < s; i++) {
         cin >> vs[i];
         shas.insert(vs[i]);
@@ -20,7 +20,6 @@ int main() {
             cout << -1;
             return 0;
         }
-        sreq.insert(vt[i]);
     }
 
     for (auto it = vs.rbegin(); it != vs.rend(); it++) {
